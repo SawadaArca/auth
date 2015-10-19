@@ -1,7 +1,7 @@
 defmodule Auth.UserController do
   use Auth.Web, :controller
 
-  plug :authenticate when action in [:index, :show]
+  # plug :authenticate when action in [:index, :show]
 
   alias Auth.User
 
@@ -69,16 +69,16 @@ defmodule Auth.UserController do
   end
 
 
-  defp authenticate(conn, _opts) do
-    if conn.assigns.current_user do
-      conn
-    else
-      conn
-      |> put_flash(:error, "You must be login to access that page.")
-      |> redirect(to: page_path(conn, :index))
-      |> halt()
-    end
-  end
+  # defp authenticate(conn, _opts) do
+  #   if conn.assigns.current_user do
+  #     conn
+  #   else
+  #     conn
+  #     |> put_flash(:error, "You must be login to access that page.")
+  #     |> redirect(to: page_path(conn, :index))
+  #     |> halt()
+  #   end
+  # end
 
 
 

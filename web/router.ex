@@ -10,6 +10,10 @@ defmodule Auth.Router do
     plug Auth.Auth, repo: Auth.Repo
   end
 
+  pipeline :authenticated do
+    plug Auth.Authenticate, repo: Auth.Repo
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -18,12 +22,17 @@ defmodule Auth.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/users", UserController
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/sessions", SessionController, only: [:new, :create]
+    resources "/users", UserController, only: [:new, :create]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Auth do
-  #   pipe_through :api
-  # end
+  scope "/", Auth do
+    pipe_through [:browser, :authenticated]
+
+    resources "/users", UserController
+    resources "/sessions", SessionController, only: [:delete]
+    resources "/projects", ProjectController
+  end
+
+
 end
